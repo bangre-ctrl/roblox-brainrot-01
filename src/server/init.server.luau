@@ -19,8 +19,9 @@ local Workspace = game:GetService("Workspace")
 local BrainrotData = require(ReplicatedStorage:WaitForChild("Shared"):WaitForChild("BrainrotData"))
 
 local ROUND_LENGTH = 300
-local FIELD_HALF = 70
+local FIELD_HALF = 130
 local MAX_WILD = 12
+local BASE_INCOME = 2
 
 -- RemoteEvents used by the client UI.
 local buyEvent = Instance.new("RemoteEvent")
@@ -66,16 +67,16 @@ end
 
 local function buildWorld()
 	-- Ground, roads and plaza.
-	makePart("Ground", Vector3.new(200, 2, 200), Vector3.new(0, 0, 0), Color3.fromRGB(90, 180, 90), Enum.Material.Grass)
-	makePart("RoadNS", Vector3.new(10, 0.4, 190), Vector3.new(0, 1.1, 0), Color3.fromRGB(80, 80, 90), Enum.Material.Concrete)
-	makePart("RoadEW", Vector3.new(190, 0.4, 10), Vector3.new(0, 1.1, 0), Color3.fromRGB(80, 80, 90), Enum.Material.Concrete)
+	makePart("Ground", Vector3.new(320, 2, 320), Vector3.new(0, 0, 0), Color3.fromRGB(90, 180, 90), Enum.Material.Grass)
+	makePart("RoadNS", Vector3.new(10, 0.4, 310), Vector3.new(0, 1.1, 0), Color3.fromRGB(80, 80, 90), Enum.Material.Concrete)
+	makePart("RoadEW", Vector3.new(310, 0.4, 10), Vector3.new(0, 1.1, 0), Color3.fromRGB(80, 80, 90), Enum.Material.Concrete)
 	makePart("Plaza", Vector3.new(40, 0.6, 40), Vector3.new(0, 1.2, 0), Color3.fromRGB(220, 200, 150), Enum.Material.Concrete)
 
 	-- Spawn point, south side.
 	local spawn = Instance.new("SpawnLocation")
 	spawn.Name = "SpawnLocation"
 	spawn.Size = Vector3.new(14, 1, 14)
-	spawn.Position = Vector3.new(0, 1.6, -80)
+	spawn.Position = Vector3.new(0, 1.6, -130)
 	spawn.Color = Color3.fromRGB(255, 220, 100)
 	spawn.Anchored = true
 	spawn.Neutral = true
@@ -90,10 +91,10 @@ local function buildWorld()
 		Color3.fromRGB(160, 120, 255),
 	}
 	local padPositions = {
-		Vector3.new(-45, 1.3, -45),
-		Vector3.new(45, 1.3, -45),
-		Vector3.new(-45, 1.3, 45),
-		Vector3.new(45, 1.3, 45),
+		Vector3.new(-75, 1.3, -75),
+		Vector3.new(75, 1.3, -75),
+		Vector3.new(-75, 1.3, 75),
+		Vector3.new(75, 1.3, 75),
 	}
 	for i, pos in ipairs(padPositions) do
 		local pad = makePart("SpawnPad" .. i, Vector3.new(18, 0.6, 18), pos, padColors[i], Enum.Material.Neon)
@@ -128,20 +129,20 @@ local function buildWorld()
 	signText.Parent = signGui
 
 	-- Trees around the edge.
-	for i = 1, 16 do
-		local angle = (i / 16) * math.pi * 2
-		local x = math.cos(angle) * 88
-		local z = math.sin(angle) * 88
+	for i = 1, 24 do
+		local angle = (i / 24) * math.pi * 2
+		local x = math.cos(angle) * 145
+		local z = math.sin(angle) * 145
 		makePart("TreeTrunk", Vector3.new(2, 8, 2), Vector3.new(x, 5, z), Color3.fromRGB(120, 80, 40), Enum.Material.Wood)
 		makePart("TreeLeaves", Vector3.new(8, 8, 8), Vector3.new(x, 12, z), Color3.fromRGB(40, 140, 60), Enum.Material.Grass, Enum.PartType.Ball)
 	end
 
 	-- Lamps along the roads.
 	for _, pos in ipairs({
-		Vector3.new(-8, 0, -40),
-		Vector3.new(8, 0, -40),
-		Vector3.new(-8, 0, 40),
-		Vector3.new(8, 0, 40),
+		Vector3.new(-8, 0, -70),
+		Vector3.new(8, 0, -70),
+		Vector3.new(-8, 0, 70),
+		Vector3.new(8, 0, 70),
 	}) do
 		makePart("LampPost", Vector3.new(1, 7, 1), Vector3.new(pos.X, 4.5, pos.Z), Color3.fromRGB(60, 60, 60), Enum.Material.Metal)
 		local lamp = makePart("Lamp", Vector3.new(2, 1, 2), Vector3.new(pos.X, 8.5, pos.Z), Color3.fromRGB(255, 240, 150), Enum.Material.Neon, Enum.PartType.Ball)
@@ -149,17 +150,17 @@ local function buildWorld()
 	end
 
 	-- Fence around the field.
-	for x = -95, 95, 10 do
-		makePart("Fence", Vector3.new(2, 3, 2), Vector3.new(x, 2.5, -95), Color3.fromRGB(200, 200, 200), Enum.Material.Wood)
-		makePart("Fence", Vector3.new(2, 3, 2), Vector3.new(x, 2.5, 95), Color3.fromRGB(200, 200, 200), Enum.Material.Wood)
+	for x = -155, 155, 10 do
+		makePart("Fence", Vector3.new(2, 3, 2), Vector3.new(x, 2.5, -155), Color3.fromRGB(200, 200, 200), Enum.Material.Wood)
+		makePart("Fence", Vector3.new(2, 3, 2), Vector3.new(x, 2.5, 155), Color3.fromRGB(200, 200, 200), Enum.Material.Wood)
 	end
-	for z = -95, 95, 10 do
-		makePart("Fence", Vector3.new(2, 3, 2), Vector3.new(-95, 2.5, z), Color3.fromRGB(200, 200, 200), Enum.Material.Wood)
-		makePart("Fence", Vector3.new(2, 3, 2), Vector3.new(95, 2.5, z), Color3.fromRGB(200, 200, 200), Enum.Material.Wood)
+	for z = -155, 155, 10 do
+		makePart("Fence", Vector3.new(2, 3, 2), Vector3.new(-155, 2.5, z), Color3.fromRGB(200, 200, 200), Enum.Material.Wood)
+		makePart("Fence", Vector3.new(2, 3, 2), Vector3.new(155, 2.5, z), Color3.fromRGB(200, 200, 200), Enum.Material.Wood)
 	end
 
 	-- A big welcome sign at the spawn.
-	local welcome = makePart("WelcomeSign", Vector3.new(20, 4, 0.6), Vector3.new(0, 6, -72), Color3.fromRGB(255, 255, 255), Enum.Material.SmoothPlastic)
+	local welcome = makePart("WelcomeSign", Vector3.new(20, 4, 0.6), Vector3.new(0, 6, -122), Color3.fromRGB(255, 255, 255), Enum.Material.SmoothPlastic)
 	local welcomeGui = Instance.new("SurfaceGui")
 	welcomeGui.Face = Enum.NormalId.Front
 	welcomeGui.Parent = welcome
@@ -244,12 +245,54 @@ local function buildBrainrotModel(def)
 	legR.CanCollide = false
 	legR.Parent = model
 
+	-- Hair / hat / accessory, drawn from Parts only -- no photos or decals.
+	local function accessoryPart(name, size, position, color, shape)
+		local part = Instance.new("Part")
+		part.Name = name
+		part.Size = size
+		part.Position = position
+		part.Color = color
+		part.Material = Enum.Material.SmoothPlastic
+		part.Anchored = true
+		part.CanCollide = false
+		if shape then
+			part.Shape = shape
+		end
+		part.Parent = model
+		return part
+	end
+	local hairColor = def.HairColor or def.HeadColor
+	if def.HairStyle == "spiky" then
+		accessoryPart("Hair", Vector3.new(2.4 * s, 1 * s, 2.2 * s), Vector3.new(0, 3.6 * s, 0), hairColor)
+		accessoryPart("HairSpikeL", Vector3.new(0.7 * s, 1.2 * s, 0.7 * s), Vector3.new(-0.8 * s, 4.2 * s, 0), hairColor)
+		accessoryPart("HairSpikeR", Vector3.new(0.7 * s, 1.2 * s, 0.7 * s), Vector3.new(0.8 * s, 4.2 * s, 0), hairColor)
+		accessoryPart("HairSpikeTop", Vector3.new(0.7 * s, 1.4 * s, 0.7 * s), Vector3.new(0, 4.4 * s, 0), hairColor)
+	elseif def.HairStyle == "curly" then
+		accessoryPart("Hair", Vector3.new(2.6 * s, 1.4 * s, 2.4 * s), Vector3.new(0, 3.6 * s, 0), hairColor, Enum.PartType.Ball)
+	elseif def.HairStyle == "long" then
+		accessoryPart("Hair", Vector3.new(2.4 * s, 1 * s, 2.2 * s), Vector3.new(0, 3.6 * s, 0), hairColor)
+		accessoryPart("HairBack", Vector3.new(2.2 * s, 2.6 * s, 0.6 * s), Vector3.new(0, 2.4 * s, -1.1 * s), hairColor)
+	elseif def.HairStyle == "short" then
+		accessoryPart("Hair", Vector3.new(2.4 * s, 0.6 * s, 2.2 * s), Vector3.new(0, 3.6 * s, 0), hairColor)
+	end
+	if def.Accessory == "strawhat" then
+		local hat = accessoryPart("StrawHat", Vector3.new(4 * s, 0.3 * s, 4 * s), Vector3.new(0, 3.9 * s, 0), Color3.fromRGB(240, 210, 120), Enum.PartType.Cylinder)
+		hat.Rotation = Vector3.new(0, 0, 90)
+		accessoryPart("HatTop", Vector3.new(1.8 * s, 0.8 * s, 1.8 * s), Vector3.new(0, 4.2 * s, 0), Color3.fromRGB(240, 210, 120), Enum.PartType.Ball)
+	elseif def.Accessory == "blindfold" then
+		accessoryPart("Blindfold", Vector3.new(2.4 * s, 0.5 * s, 2.2 * s), Vector3.new(0, 2.8 * s, 0), Color3.fromRGB(20, 20, 20))
+	elseif def.Accessory == "headband" then
+		accessoryPart("Headband", Vector3.new(2.3 * s, 0.4 * s, 2.1 * s), Vector3.new(0, 3.2 * s, 0), Color3.fromRGB(40, 60, 160))
+	elseif def.Accessory == "scar" then
+		accessoryPart("Scar", Vector3.new(0.5 * s, 0.8 * s, 0.2 * s), Vector3.new(-0.6 * s, 3 * s, 1.05 * s), Color3.fromRGB(180, 30, 30))
+	end
+
 	-- Name + rarity tag floating above the model.
 	local tag = Instance.new("BillboardGui")
 	tag.Name = "Tag"
-	tag.Size = UDim2.new(0, 140, 0, 50)
-	tag.StudsOffset = Vector3.new(0, 4 * s, 0)
-	tag.AlwaysOnTop = true
+	tag.Size = UDim2.new(0, 120, 0, 40)
+	tag.StudsOffset = Vector3.new(0, 5 * s, 0)
+	tag.AlwaysOnTop = false
 	tag.Parent = body
 
 	local nameLabel = Instance.new("TextLabel")
@@ -300,7 +343,7 @@ local function setupPlayer(player)
 
 	local income = Instance.new("IntValue")
 	income.Name = "Income"
-	income.Value = 0
+	income.Value = BASE_INCOME
 	income.Parent = leaderstats
 
 	owned[player] = {}
@@ -312,18 +355,42 @@ local function setupPlayer(player)
 end
 
 local function totalIncome(player)
-	local sum = 0
+	local sum = BASE_INCOME
 	for _, entry in ipairs(owned[player] or {}) do
 		sum += entry.def.Income
 	end
 	return sum
 end
 
+local function randomSpreadPos()
+	-- Random field position, retrying if it would land within ~15 studs
+	-- of another wild brainrot, so they do not all cluster in the centre.
+	for _ = 1, 10 do
+		local x = math.random(-FIELD_HALF, FIELD_HALF)
+		local z = math.random(-FIELD_HALF, FIELD_HALF)
+		local tooClose = false
+		for _, other in ipairs(wild) do
+			if other.model.Parent then
+				local pos = other.model:GetPivot().Position
+				local dx = pos.X - x
+				local dz = pos.Z - z
+				if dx * dx + dz * dz < 15 * 15 then
+					tooClose = true
+					break
+				end
+			end
+		end
+		if not tooClose then
+			return x, z
+		end
+	end
+	return math.random(-FIELD_HALF, FIELD_HALF), math.random(-FIELD_HALF, FIELD_HALF)
+end
+
 local function spawnWild()
 	local def = BrainrotData.RandomDef()
 	local model = buildBrainrotModel(def)
-	local x = math.random(-FIELD_HALF, FIELD_HALF)
-	local z = math.random(-FIELD_HALF, FIELD_HALF)
+	local x, z = randomSpreadPos()
 	model:PivotTo(CFrame.new(x, 4, z))
 	model.Parent = Workspace
 

@@ -51,7 +51,7 @@ topBar.Parent = gui
 
 local coinsLabel = label(topBar, "Coins", "Coins: 100", UDim2.new(0, 180, 1, 0), UDim2.new(0, 10, 0, 0), 20, Color3.fromRGB(255, 210, 0))
 local brainrotsLabel = label(topBar, "Brainrots", "Brainrots: 0", UDim2.new(0, 180, 1, 0), UDim2.new(0, 200, 0, 0), 20)
-local incomeLabel = label(topBar, "Income", "+0 / sec", UDim2.new(0, 160, 1, 0), UDim2.new(0, 390, 0, 0), 20, Color3.fromRGB(120, 255, 120))
+local incomeLabel = label(topBar, "Income", "+2 / sec", UDim2.new(0, 160, 1, 0), UDim2.new(0, 390, 0, 0), 20, Color3.fromRGB(120, 255, 120))
 local timerLabel = label(topBar, "Timer", "Round: 5:00", UDim2.new(0, 160, 1, 0), UDim2.new(1, -170, 0, 0), 20)
 
 local function refreshStats()
@@ -95,7 +95,7 @@ shop.BackgroundTransparency = 0.2
 shop.BorderSizePixel = 0
 shop.Parent = gui
 
-label(shop, "ShopTitle", "BRAINROT SHOP", UDim2.new(1, 0, 0, 36), UDim2.new(0, 0, 0, 0), 22, Color3.fromRGB(255, 210, 0))
+label(shop, "ShopTitle", "ANIME SHOP", UDim2.new(1, 0, 0, 36), UDim2.new(0, 0, 0, 0), 22, Color3.fromRGB(255, 210, 0))
 
 local shopList = Instance.new("ScrollingFrame")
 shopList.Name = "ShopList"
@@ -202,7 +202,7 @@ startScreen.Parent = gui
 
 local title = label(startScreen, "Title", "BRAINROT COLLECTOR", UDim2.new(0, 500, 0, 60), UDim2.new(0.5, -250, 0, 120), 40, Color3.fromRGB(255, 210, 0))
 title.BackgroundTransparency = 1
-local how = label(startScreen, "How", "Click wild brainrots to collect coins.\nBuy brainrot followers in the shop.\nFollowers earn coins every second.\nMost brainrots at the end of the round wins!", UDim2.new(0, 500, 0, 140), UDim2.new(0.5, -250, 0, 200), 20)
+local how = label(startScreen, "How", "Collect anime-parody heroes: Narutod, Gokun, Luffi,\nZoron, Tanjirod, Saitamod, Gojod and Dekun!\nClick a wild hero to collect coins. You earn +2/sec\nfrom the start, and followers earn even more.\nBuy followers in the shop. Most heroes at the\nend of the round wins!", UDim2.new(0, 500, 0, 140), UDim2.new(0.5, -250, 0, 200), 20)
 how.BackgroundTransparency = 1
 
 local playButton = Instance.new("TextButton")

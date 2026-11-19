@@ -6,21 +6,25 @@ entry by @bangre / bangre-ctrl.
 
 ## How to play
 
-- Wild brainrots wander the field (Tung Tung Tung Sahur, Tralalero
-  Tralala, Chimpanzini Bananini, Bombardiro Crocodilo, Lirili Larila,
-  Cappuccino Assassino, Brr Brr Patapim, La Vaca Saturno Saturnita).
-  Click one to collect it for coins.
+- Wild anime-parody heroes wander the field (Narutod, Gokun, Luffi,
+  Zoron, Tanjirod, Saitamod, Gojod, Dekun). These are original
+  parody characters with twisted names, built from Parts in code --
+  no photos or copyrighted images are used. Click one to collect
+  it for coins.
 - Gold coins spawn around the map; touch one for +10 coins.
-- Spend coins in the shop (right side of the screen) to buy a brainrot
-  follower. Followers walk behind you and earn coins every second.
+- Everyone earns a base +2 coins/sec from the start. Spend coins in
+  the shop (right side of the screen) to buy a follower. Followers
+  walk behind you and earn coins every second on top of that.
 - The player with the most brainrots collected when the 5-minute
   round timer ends is announced as the round winner.
 - Coins, brainrots collected and income are on the Roblox leaderboard.
 
 ## How it is built
 
-- `src/shared/BrainrotData.luau` — the 8 brainrots: rarity, cost,
-  income, reward, colours, size.
+- `src/shared/BrainrotData.luau` — the 8 anime-parody heroes: rarity,
+  cost, income, reward, colours, size, hair style and accessory.
+  The map is 320x320, wild heroes spawn spread out with a minimum
+  separation so their name tags do not overlap.
 - `src/server/init.server.luau` — builds the whole 3D world in code
   (ground, roads, plaza, spawn, shop stall, trees, lamps, fences,
   welcome sign), spawns and moves wild brainrots, coins, followers,
